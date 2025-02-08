@@ -23,18 +23,6 @@ export default function Chat() {
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
       {messages.map((m) => {
-        if (m.toolInvocations?.length) {
-          return (
-            <div key={m.id} className="whitespace-pre-wrap">
-              [
-              {m.toolInvocations[0].state === 'result' &&
-              m.toolInvocations[0].result === true
-                ? 'Вы записаны'
-                : 'Не получилось записать'}
-              ]
-            </div>
-          );
-        }
         return (
           <div key={m.id} className="whitespace-pre-wrap">
             {m.role === 'user' ? 'User: ' : 'AI: '}

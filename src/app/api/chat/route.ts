@@ -19,6 +19,7 @@ export async function POST(req: NextRequest) {
 
   const stream = streamText({
     model: openai("gpt-4o-mini"),
+    system: "You are a helpful assistant.",
     messages,
   });
   return stream.toDataStreamResponse();
