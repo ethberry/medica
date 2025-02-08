@@ -7,7 +7,7 @@ import { type CoreMessage, streamText } from "ai";
 const BodyValidationSchema = z.object({
   messages: z.array(
     z.object({
-      role: z.enum(["system", "user", "assistant"]),
+      role: z.enum(["system", "user", "assistant", "tool"]),
       content: z.string(),
     }),
   ).nonempty(),
