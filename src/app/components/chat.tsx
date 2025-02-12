@@ -1,6 +1,7 @@
-'use client'
+"use client";
 
-import { useChat } from 'ai/react';
+import { useChat } from "ai/react";
+import { ToolInvocation } from "ai";
 
 export default function Chat() {
   const {
@@ -20,13 +21,33 @@ export default function Chat() {
     console.error(error);
   }
 
+  const formatToolInvocation = (toolInvocation: ToolInvocation) => {
+    switch (toolInvocation.toolName) {
+      case "appointment":
+        if (toolInvocation.state === "result") {
+          if (toolInvocation.result) {
+            return "Вы записаны";
+          }
+          return "Не получилось записать";
+        }
+      default:
+        return "not implemented";
+    }
+  };
+
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {messages.map((m) => {
+      {messages.map((message) => {
+        console.log(message)
+        if (message.toolInvocations?.length) {
+          return message.toolInvocations.map((toolInvocation, i) =>
+            <div key={i}>[{formatToolInvocation(toolInvocation)}]</div>,
+          );
+        }
         return (
-          <div key={m.id} className="whitespace-pre-wrap">
-            {m.role === 'user' ? 'User: ' : 'AI: '}
-            {m.content}
+          <div key={message.id} className="whitespace-pre-wrap">
+            {message.role === "user" ? "User: " : "Assistant: "}
+            {message.content}
           </div>
         );
       })}
