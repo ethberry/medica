@@ -26,6 +26,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Moderation failed" }, { status: 400 });
   }
 
-  const stream = await getStreamText(data.messages as Array<CoreMessage>)
+  const stream =  getStreamText(data.messages as Array<CoreMessage>)
   return stream.toDataStreamResponse();
 }

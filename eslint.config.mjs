@@ -1,16 +1,26 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import typescriptRules from "@ethberry/eslint-config/presets/tsx.mjs";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// DON'T ADD ANY RULES!
+// FIX YOUR SHIT!!!
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+export default [
+  {
+    ignores: [
+      ".next"
+    ]
+  },
 
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  {
+    ignores: ["eslint.config.mjs"],
+    languageOptions: {
+      parserOptions: {
+        project: [
+          "./tsconfig.eslint.json",
+        ],
+        tsconfigRootDir: process.dirname,
+      },
+    },
+  },
+
+  ...typescriptRules,
 ];
-
-export default eslintConfig;

@@ -17,19 +17,16 @@ bot.use(session({
 
 bot.api.config.use(apiThrottler());
 
-bot.use(
-  limit({
-    timeFrame: 10000,
-    limit: 2,
-    onLimitExceeded: (ctx) => {
-      ctx?.reply("Please refrain from sending too many requests!");
-    },
-
-    keyGenerator: (ctx) => {
-      return ctx.from?.id.toString();
-    },
-  }),
-);
+bot.use(limit({
+  timeFrame: 10000,
+  limit: 2,
+  onLimitExceeded: (ctx) => {
+    void ctx?.reply("Please refrain from sending too many requests!");
+  },
+  keyGenerator: (ctx) => {
+    return ctx.from?.id.toString();
+  },
+}));
 
 bot.on("message:photo", async (ctx) => {
   await ctx.reply("Images are not supported");
@@ -71,7 +68,7 @@ bot.on("message", async (ctx) => {
       role: "user",
     });
 
-    const stream = await getStreamText(ctx.session);
+    const stream =  getStreamText(ctx.session);
 
     let resultText = "";
     for await (const part of stream.textStream) {

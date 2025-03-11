@@ -1,13 +1,13 @@
 "use client";
 
 import { useChat } from "@ai-sdk/react";
-import { ToolInvocation } from "ai";
+import { ToolInvocationUIPart } from "@ai-sdk/ui-utils";
 
 export default function Chat() {
   const {
     error,
     input,
-    isLoading,
+    status,
     handleInputChange,
     handleSubmit,
     messages,
@@ -21,27 +21,28 @@ export default function Chat() {
     console.error(error);
   }
 
-  const formatToolInvocation = (toolInvocation: ToolInvocation) => {
-    switch (toolInvocation.toolName) {
+  const formatToolInvocation = (part: ToolInvocationUIPart) => {
+    switch (part.toolInvocation.toolName) {
       case "appointment":
-        if (toolInvocation.state === "result") {
-          if (toolInvocation.result) {
+        if (part.toolInvocation.state === "result") {
+          if (part.toolInvocation.result) {
             return "Вы записаны";
           }
           return "Не получилось записать";
         }
+        break
       default:
-        return "not implemented";
+        return "Not implemented";
     }
   };
 
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
       {messages.map((message) => {
-        console.log(message)
-        if (message.toolInvocations?.length) {
-          return message.toolInvocations.map((toolInvocation, i) =>
-            <div key={i}>[{formatToolInvocation(toolInvocation)}]</div>,
+        const parts = message.parts.filter(part => part.type === "tool-invocation")
+        if (parts.length) {
+          return parts.map((part, i) =>
+            <div key={i}>[{formatToolInvocation(part)}]</div>,
           );
         }
         return (
@@ -52,7 +53,7 @@ export default function Chat() {
         );
       })}
 
-      {isLoading && (
+      {(status === "submitted" || status === "streaming") && (
         <div className="mt-4 text-gray-500">
           <div>Loading...</div>
           <button
@@ -84,7 +85,7 @@ export default function Chat() {
           value={input}
           placeholder="Say something..."
           onChange={handleInputChange}
-          disabled={isLoading || error != null}
+          disabled={status === "submitted" || status === "streaming" || error != null}
         />
       </form>
     </div>

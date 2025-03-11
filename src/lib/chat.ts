@@ -21,7 +21,7 @@ export const moderate = async (messages: Array<CoreMessage>) => {
   return results.some(result => result.flagged);
 };
 
-export const getStreamText = async (messages: Array<CoreMessage>) => {
+export const getStreamText = (messages: Array<CoreMessage>) => {
   const formatDate = (date: Date) => date.toLocaleDateString("en-US", {
     weekday: "long",
     month: "long",
@@ -33,7 +33,7 @@ export const getStreamText = async (messages: Array<CoreMessage>) => {
   });
 
   return  streamText({
-    messages: messages as Array<CoreMessage>,
+    messages: messages,
     model: openai("gpt-4o-mini"),
     system: `
       Ты — полезный ассистент в приватной клинике.
@@ -74,7 +74,7 @@ export const getStreamText = async (messages: Array<CoreMessage>) => {
           email: z.string(),
         }),
         execute: async ({ type, time, name, email }) => {
-          console.log({ type, time, name, email });
+          console.info({ type, time, name, email });
           const date = new Date();
           date.setDate(date.getDate() + 1);
           date.setUTCHours(12);
