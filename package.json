@@ -14,7 +14,7 @@
     "@grammyjs/transformer-throttler": "1.2.1",
     "ai": "4.2.0",
     "grammy": "1.35.0",
-    "next": "15.2.2",
+    "next": "15.2.3",
     "openai": "4.89.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
